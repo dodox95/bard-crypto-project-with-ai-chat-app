@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <title>BardWeb3 - AI For Everyone</title>
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+        
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');            
+            body.light-theme {
+                --bg: rgba(255, 255, 255, 0.8);
+                --text-color: black;
+                --navbar-bg: rgba(255, 255, 255, 0.8);
+                --navbar-text: #111;
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                border: 1px solid rgba( 255, 255, 255, 0.18 );
+            }
+            body.dark-theme {
+                --bg: #343a40;
+                --text-color: white;
+                --navbar-bg: #343a40;
+                --navbar-text: snow;
+            }
+            body.dark-theme .jumbotron {
+                background: #343a40;
+            }
+            
+            body {
+                font-family: 'IBM Plex Mono', monospace;
+                background-color: var(--bg);
+                color: var(--text-color);
+                transition: background-color 0.5s, color 0.5s;
+
+            }
+            .timeline li.completed {
+                color: #66bb6a; /* Or whatever color signifies 'completed' in your design */
+            }
+            
+            .custom-container {
+                width: 80%;
+                max-width: 100%;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            .theme-switch-wrapper {
+              display: flex;
+              align-items: center;
+            }
+            .theme-switch {
+              display: inline-block;
+              height: 34px;
+              position: relative;
+              width: 60px;
+            }
+            .theme-switch input {
+              display:none;
+            }
+            .slider {
+              background-color: #ccc;
+              bottom: 0;
+              cursor: pointer;
+              left: 0;
+              position: absolute;
+              right: 0;
+              top: 0;
+              transition: .4s;
+            }
+            .slider:before {
+              background-color: #fff;
+              bottom: 4px;
+              content: "";
+              height: 26px;
+              left: 4px;
+              position: absolute;
+              transition: .4s;
+              width: 26px;
+            }
+            input:checked + .slider {
+              background-color: #66bb6a;
+            }
+            input:focus + .slider {
+              box-shadow: 0 0 1px #66bb6a;
+            }
+            input:checked + .slider:before {
+              transform: translateX(26px);
+            }
+            /* Rounded sliders */
+            .slider.round {
+              border-radius: 34px;
+            }
+            .slider.round:before {
+              border-radius: 50%;
+            }
+            .btn-primary {
+                background: linear-gradient(60deg, #ff0000, #ff7f00);
+                box-shadow: 0 2px 10px rgba(255, 0, 0, 0.4);
+                color: white !important;
+                transition: all 0.5s ease;
+                border: none;
+                
+            }
+            
+            .btn-primary:hover {
+                background: linear-gradient(60deg, #ff7f00, #ff0000);
+                box-shadow: 0 2px 20px rgba(255, 127, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.4);
+                animation: shake 0.5s;
+                animation-iteration-count: infinite;
+                text-shadow: 0 0 5px #ffc107, 0 0 10px #ffc107, 0 0 15px #ffc107, 0 0 20px white, 0 0 30px white, 0 0 40px whitesmoke;
+                transition: all 0.3s ease;
+                font-family: 'Rubik Dirt', cursive;  /* Dodajemy czcionkę Rubik Dirt */
+
+            }
+            
+            @keyframes shake {
+                0% { transform: translate(1px, 1px) rotate(0deg); }
+                10% { transform: translate(-1px, -2px) rotate(-1deg); }
+                20% { transform: translate(-3px, 0px) rotate(1deg); }
+                30% { transform: translate(3px, 2px) rotate(0deg); }
+                40% { transform: translate(1px, -1px) rotate(1deg); }
+                50% { transform: translate(-1px, 2px) rotate(-1deg); }
+                60% { transform: translate(-3px, 1px) rotate(0deg); }
+                70% { transform: translate(3px, 1px) rotate(-1deg); }
+                80% { transform: translate(-1px, -1px) rotate(1deg); }
+                90% { transform: translate(1px, 2px) rotate(0deg); }
+                100% { transform: translate(1px, -2px) rotate(-1deg); }
+            }
+            h1 {
+                color: white;
+                text-shadow: 4px 4px 4px black;
+                font-family: 'Rubik Dirt', cursive;  /* Dodajemy czcionkę Rubik Dirt */
+            }
+            
+            h1 span.badge {
+                background: linear-gradient(60deg, #ff0000, #ff7f00);
+                border: none;
+                box-shadow: 0 2px 10px rgba(255, 0, 0, 0.4);
+                transition: all 0.5s ease;
+                color: #F5F5DC;
+            }
+            
+            h1 span.badge:hover {
+                background: linear-gradient(60deg, #ff7f00, #ff0000);
+                box-shadow: 0 2px 20px rgba(255, 127, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.4);
+            }
+            .timeline li.completed {
+                color: #66bb6a; /* Or whatever color signifies 'completed' in your design */
+            }
+            
+            .timeline li.completed .dot {
+                background-color: #66bb6a; /* same green color for completed dots */
+            }
+            /* The dot class styling - replace with the actual style for your dots */
+            .timeline li .dot {
+                height: 12px;
+                width: 12px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+            }
+        
+
+            /* For the 'completed' icon, you can use FontAwesome's check icon for example */
+            .timeline li.completed::before {
+                content: '\f00c'; /* FontAwesome's check icon */
+                font-family: 'Font Awesome 5 Free'; /* Corrected the font family */
+                font-weight: 900; /* Added font-weight */
+                color: #66bb6a !important; /* same green color */
+                /* add other necessary styling */
+            }
+            
+            
+        </style>
+    </head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>  
+<body class="dark-theme">
+  <header>
+    <div class="custom-container">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="/">
+                  <img src="{% static 'a1i.png' %}" class="logo" alt="BardWeb3" width="30" height="30"> BardWeb3
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#takeit">Buy Token</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="whitepaperDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Whitepaper
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="whitepaperDropdown">
+                            <li><a class="dropdown-item" href="/whitepaper" target="_blank">Whitepaper</a></li>
+                            <li><a class="dropdown-item" href="/roadmap" target="_blank">Roadmap</a></li>
+                        </ul>
+                    </li>
+                    
+                      <li class="nav-item">
+                        <a class="nav-link" href="#overview">Overview</a>
+                    </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#tokenomics">Tokenomics</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#roadmap">Roadmap</a>
+                    </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#about-us">About Us</a>
+                    </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#contactFooter">Contact</a>
+                      </li>
+                  </ul>
+                  <div class="theme-switch-wrapper">
+                      <label class="theme-switch" for="checkbox">
+                          <input type="checkbox" id="checkbox" />
+                          <div class="slider round"></div>
+                      </label>
+                  </div>
+              </div>
+          </nav>
+      </div>
+  </header>
+
+<main role="main" class="custom-container mt-5">
+    <div class="jumbotron d-flex align-items-center">
+        <div class="jumbotron-text">
+            <h1 id="title">Welcome to BardWeb3</h1>
+            <p class="lead">AI Integrated with WEB3 Technology</p>
+            <p>Our State-of-the-Art Application is Now Live for Public Access!</p>
+            <p><a class="btn btn-lg btn-primary" href="chat_page/" role="button">Try Bard Now!</a></p>
+        </div>
+        <div class="jumbotron-img">
+            <img src="{% static 'ai.png' %}" class="earth" alt="Earth">
+        </div>
+    </div>
+    <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-secondary">The AI chatbot</span></h1>
+            <p class="lead">We do not store your data. Our technology combines artificial intelligence with WEB3 technology.</p>
+        </div>
+    </div>
+    <div class="image-container">
+        <div class="image-item">
+            <img src="{% static 'artificial-intelligence.png' %}" alt="Artificial Intelligence">
+            <p>Artificial Intelligence</p>
+        </div>
+        <div class="image-item">
+            <img src="{% static 'anonymous.png' %}" alt="Anonymity">
+            <p>Anonymity</p>
+        </div>
+        <div class="image-item">
+            <img src="{% static 'web-30.png' %}" alt="WEB3 Technology">
+            <p>WEB3 Technology</p>
+        </div>
+    </div>
+    <div class="articles-container">
+        <div id="web3-article" class="article-card">
+            <h2>What is WEB3?</h2>
+            <p>
+                This vision sees a fully decentralized web that gives control back to users, moving away from today's internet dominated by centralized entities like corporations or governments. This new web is built on a decentralized network infrastructure known as blockchain. The most common example of this is Bitcoin, a blockchain-based system. Other projects, such as Ethereum, have expanded and refined blockchain's principles and introduced the concept of smart contracts.
+            </p>
+        </div>
+        <div id="ai-article" class="article-card">
+            <h2>What is AI?</h2>
+            <p>Artificial Intelligence (AI) is a branch of computer science that focuses on creating machines and software that can perform tasks that normally require human intelligence. These tasks include learning and adapting to new situations, understanding and interpreting language, recognizing patterns, problem-solving, and making decisions. Today the use of artificial intelligence is becoming an everyday occurrence for us and this is just the beginning of the big story.</p>
+        </div>
+        <div id="ai-article" class="article-card">
+            <h2>Anonymity?</h2>
+            <p>Blockchain technology, embedded in the Web3 ethos, shares a key trait with AI: autonomy. A powerful tool for privacy, blockchain ensures secure transactions and information sharing, thanks to its inherent decentralization and immutability. Coupled with AI, it becomes even more powerful, empowering users to retain control over their data while benefiting from AI's analytical prowess.</p>
+        </div>
+    </div>  
+    <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-secondary">Our goals</span></h1>
+            <p class="lead">To combine WEB3 technology and artificial intelligence to break down language barriers.</p>
+        </div>
+    </div>  
+
+    <div class="articles-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div id="web3-article" class="web-card">
+                    <h2>
+                        AI chatbot
+                        <img src="{% static 'text.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>Thanks to the application, you will already be able to shorten your activities to a minimum. Write what you need and the AI will do it for you.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div id="ai-article" class="web-card">
+                    <h2>
+                        Speech to Text
+                        <img src="{% static 'text-to-speech.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>Say something, let the system convert your speech to text and prompt! Do not waste your time on writing anymore.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="ai-article" class="web-card">
+                    <h2>Anonymity
+                        <img src="{% static 'hacker.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>Thanks to WEB3 and blockchain technology, we are able to ensure the anonymity of our users. We do not store your data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div id="web3-article" class="web-card">
+                    <h2>
+                        All in One
+                        <img src="{% static 'global.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>All the various other AI models will be available on our app. We want to create one place where there will be various other models not only BARD.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="ai-article" class="web-card">
+                    <h2>
+                        Text-to-image
+                        <img src="{% static 'converter.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>We want to implement Stable Diffusion, Mid Journey and Leonardo models in our application. Graphics generators will be available to anyone with a token.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="ai-article" class="web-card">
+                    <h2>
+                        Mobile & Web App
+                        <img src="{% static 'smartphone.png' %}" style="float:right; width:30px; height:30px;">
+                    </h2>
+                    <p>We want to create a web and mobile application for our users. Our point is also to create a mobile application on iOS and Android.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-success">About Us</span></h1>
+        </div>
+    </div>  
+    <div class="col-md-12">
+        <div id="ai-article" class="web-card">
+            <h2 class="centered" id="about-us">
+                We are those who believe in freedom.
+                <img src="{% static 'freedom (1).png' %}" style="float:center; width:30px; height:30px;">
+            </h2>
+            <div class="content card-text">
+                <p>
+                    We are another wave of a community of <span>cyberpunks</span> and early adopters of <span>blockchain technology</span>. 
+                    We are fervent believers in the potential of the decentralized web, or <span>Web3</span>, 
+                    to revolutionize our digital lives. Our project is dedicated to building a <span>translator</span> 
+                    based on artificial intelligence and leveraging the power of blockchain technology.
+                </p>
+                <p>
+                    Our team is driven by the desire to fight for <span>freedom</span> and <span>anonymity</span> 
+                    on the Internet. We understand the value of privacy, freedom of information, 
+                    and the potential of technology to enable these values. 
+                    We are not just developers, but pioneers on the frontier of the digital world, 
+                    where data is the new gold, and privacy, a fundamental right.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-success" id="overview">Overview</span></h1>
+        </div>
+    </div>  
+    <div class="articles-container">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="web3-article" class="web-card">
+                    <h2 class = "centered">
+                        Token Ticker
+                        <img src="{% static 'crypto.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="lnsc">$BARD</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div id="ai-article" class="web-card">
+                    <h2 class = "centered">
+                        Token Standard
+                        <img src="{% static 'blockchain.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="web">Ethereum</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="ai-article" class="web-card">
+                    <h2 class = "centered">
+                        Max Supply
+                        <img src="{% static 'coin.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="supply">1 000 000 000</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="web3-article" class="web-card">
+                    <h2 class = "centered">
+                        Circulating Supply
+                        <img src="{% static 'coins.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="supply">1 000 000 000</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="web3-article" class="web-card">
+                    <h2 class = "centered">
+                        Initial Market Cap
+                        <img src="{% static 'rocket.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="supply">TBA</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="ai-article" class="web-card">
+                    <h2 class = "centered">Initial Circulating Supply
+                        <img src="{% static 'flag.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="supply">TBA</p>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div id="ai-article" class="web-card">
+                    <h2 class="centered">
+                        Initial Token Price
+                        <img src="{% static 'bills.png' %}" style="float:center; width:30px; height:30px;">
+                    </h2>
+                    <p id="supply">TBA</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-success" id="tokenomics">Token Allocation</span></h1>
+        </div>
+    </div> 
+
+    <div class="chart-container">
+        <div id="tokenomie-chart"></div>
+        <div id="tokenomie-key"></div>
+      </div>
+
+
+      <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-success" id="roadmap">BardWeb3 Project Roadmap</span></h1>
+        </div>
+    </div>  
+    
+    <div class="container my-5">
+        <ul class="timeline">
+            <li class="completed">
+                <div class="dot"></div>
+                <div class="time">Phase 1: Research and Development</div>
+                <div class="desc">Assembled a team of experts in blockchain technology, cryptocurrency, and AI. Conducted comprehensive research on the latest trends in AI and cryptocurrency. Developed a white paper that outlines the project's goals and objectives. Created a prototype of the project's platform for initial testing and refinement.</div>
+            </li>
+            <li class="completed">
+                <div class="dot"></div>
+                <div class="time">Phase 2: Pre-Launch</div>
+                <div class="desc">Cultivated a community of passionate supporters and potential investors. Marketed the project to potential users, emphasizing its unique features and advantages. Established a robust presence on various social media platforms. Implemented a Telegram bot for initial testing and user feedback. Developed individual Telegram bot services for personalized user experiences.</div>
+            </li>
+            <li>
+                <div class="dot"></div>
+                <div class="time">Phase 3: Launch</div>
+                <div class="desc">Officially launch the BardWeb3 platform and the $BARD token. Intensify promotional efforts to increase awareness within the broader cryptocurrency community. Pursue listing on reputable platforms such as CoinGecko and CoinMarketCap.</div>
+            </li>
+            <li>
+                <div class="dot"></div>
+                <div class="time">Phase 4: Growth and Adoption</div>
+                <div class="desc">Continually develop and improve the platform's features, including AI graphic generation capabilities, support for multiple languages, voice command execution functionality, advanced coding features. Implement the Stable Diffusion, Mid Journey, and Leonardo models in our application for advanced text-to-image capabilities. Ensure that these graphic generators are available to all token holders. Work towards partnerships with other cryptocurrency projects for collaborative growth. Intensify efforts to grow the project's community and user base, bringing BardWeb3 to more users around the globe. Initiate a comprehensive global marketing campaign across major platforms. Develop an integrated web and mobile application for iOS and Android platforms, enhancing accessibility for all users.</div>
+            </li>
+            <li>
+                <div class="dot"></div>
+                <div class="time">Phase 5: Future Plans</div>
+                <div class="desc">Enhance platform capabilities by integrating Google apps (including Docs, Drive, Gmail, Maps, Google Lens, and others). Continue to incorporate various AI models into our app, aiming to create a one-stop platform for a diverse array of AI functionalities, not limited to BardWeb3.</div>
+            </li>
+        </ul>
+    </div>
+    
+    
+
+      <div class="title">
+        <div class="jumbotron-title">
+            <h1><span class="badge bg-success">Smart Contract Address</span></h1>
+        </div>
+    </div> 
+
+    <div class="col-md-12">
+        <div id="ai-article" class="web-card">
+            <h2 class="centered">
+                (never send money/crypto to this address!)
+                <img src="{% static 'warning.png' %}" style="float:center; width:30px; height:30px;">
+            </h2>
+            <p id="takeit">
+            <p id="supply">Soon!</p>
+
+        </div>
+    </div>
+
+</main>
+<div class="custom-container">
+  <footer class="footer bg-dark text-white">
+      <div class="custom-container py-5">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase" id="contactFooter">Contact:</h5>
+                <p><a href="https://t.me/BardWeb3token">Telegram</a></p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase">Quick links</h5>
+                <p><a href="/">Home</a></p>
+                <p><a href="#about-us">About Us</a></p>
+                <p><a href="https://t.me/BardWeb3token">Contact</a></p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase">Crucial Links:</h5>
+                <p><a href="#takeit">Buy Tokens</a></p>
+                <p><a href="/whitepaper">Whitepaper</a></p>
+                <p><a href="#tokenomics">Tokenomics</a></p>              
+                <p><a href="/roadmap">Roadmap</a></p>              
+
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase">Socials:</h5>
+                <p><a href="https://twitter.com/BARDweb3">Twitter</a></p>
+                <p><a href="https://t.me/BardWeb3token">Telegram</a></p>
+            </div>
+            
+          <div class="row">
+              <div class="col-lg-12 text-center">
+                  <span>&copy; 2023 BardWeb3. All rights reserved.</span>
+              </div>
+          </div>
+      </div>
+  </footer>
+</div>
+<script>
+    document.getElementById('checkbox').addEventListener('change', function(event) {
+        document.body.classList.toggle('light-theme', event.currentTarget.checked);
+        document.body.classList.toggle('dark-theme', !event.currentTarget.checked);
+    });
+</script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script>
+    var data = [
+      { label: 'Presale', percent: 30 },
+      { label: 'Marketing', percent: 5 },
+      { label: 'Development', percent: 5 },
+      { label: 'LP (lock 3 months)', percent: 60 },
+    ];
+    
+    var svg = d3.select("#tokenomie-chart")
+      .append("svg")
+      .attr("width", 300)
+      .attr("height", 300);
+    
+    var radius = Math.min(300, 300) / 2;
+    
+    var color = d3.scaleOrdinal()
+    .range(["#FF4500", "#FF8C00", "#FFA500", "#D2691E", "#B22222"]);
+    
+    var arc = d3.arc()
+      .outerRadius(radius - 10)
+      .innerRadius(0);
+    
+    var pie = d3.pie()
+      .sort(null)
+      .value(function(d) { return d.percent; });
+    
+    var g = svg.append("g")
+      .attr("transform", "translate(" + 300 / 2 + "," + 300 / 2 + ")");
+    
+    var path = g.selectAll("path")
+      .data(pie(data))
+      .enter().append("path")
+      .attr("fill", function(d, i) { return color(i); })
+      .attr("d", arc);
+    
+    // Create key
+    var key = d3.select("#tokenomie-key");
+    
+    data.forEach(function(d, i) {
+      var keyEntry = key.append("div")
+        .attr("class", "token-key");
+    
+      keyEntry.append("div")
+        .attr("class", "token-key__color")
+        .style("background-color", color(i));
+    
+      keyEntry.append("div")
+        .attr("class", "token-key__label")
+        .text(d.label + ": " + d.percent + "%");
+    });
+    
+    // Tax information
+    var taxInfo = d3.select("#tax-info");
+    taxInfo.append("div")
+      .attr("class", "tax-info")
+      .text("Tax 5% = 1% LP, 2% Marketing, 2% Development");
+    </script>
+    
+  
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Chat with Bard</h1>
+    <label for="question">Your question:</label><br>
+    <input type="text" id="question" name="question"><br>
+    <button onclick="askBard()">Ask</button>
+    <p id="answer"></p>
+    <script>
+        function askBard() {
+            const question = document.getElementById("question").value;
+            fetch(`/chat/?question=${question}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("answer").innerText = data.answer;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>

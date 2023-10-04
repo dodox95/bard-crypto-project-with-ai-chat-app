@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="text">Text:</label><br>
+        <input type="text" id="text" name="text"><br>
+        <label for="target_language">Translate to:</label><br>
+        <input type="text" id="target_language" name="target_language"><br>
+        <input type="submit" value="Translate">
+    </form>
+
+    {% if translation %}
+        <p>Translation: {{ translation }}</p>
+    {% endif %}
+</body>
+</html>

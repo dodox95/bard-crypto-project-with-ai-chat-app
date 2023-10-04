@@ -1,0 +1,198 @@
+:root {
+    --neon-color-light: rgb(224, 217, 217);  /* jasny kolor neonowy dla dark mode */
+    --neon-color-dark: #222;  /* ciemny kolor neonowy dla light mode */
+    --neon-color: var(--neon-color-light); 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #18191a;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 62px 0 rgba(203, 205, 240, 0.37);
+    border: 2px solid rgba(255, 255, 255, 0.107);
+    animation: float 6s infinite ease-in-out;
+
+}
+
+@keyframes glow1 {
+    from {
+        box-shadow: 0 0 5px #fafafa, 0 0 10px #fafafa, 0 0 15px #fafafa, 0 0 20px #fafafa, 0 0 30px #fafafa, 0 0 40px #fafafa;
+    }
+    to {
+        box-shadow: 0 0 10px #222, 0 0 20px 333, 0 0 30px 333, 0 0 40px red;
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color), 0 0 15px var(--neon-color), 0 0 20px var(--neon-color);
+    }
+    to {
+        text-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color), 0 0 30px var(--neon-color), 0 0 40px var(--neon-color);
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#loginButton {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+#loginButton:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#loginButton img {
+    width: 20px;
+    height: 20px;
+}
+
+#loginButton span {
+    position: relative;
+    right: 0;
+}
+
+#title {
+    font-family: 'Rubik Dirt', cursive;  /* Dodajemy czcionkę Rubik Dirt */
+    font-weight: 700;
+    font-size: 5vw;
+    margin-bottom: 50px;
+    color: #333;
+    text-shadow: 0 0 5px #fafafa, 0 0 10px #fafafa, 0 0 15px #fafafa, 0 0 20px #fafafa, 0 0 30px #fafafa, 0 0 40px #fafafa;
+    animation: glow 2s ease-in-out infinite alternate;
+
+}
+
+
+@media screen and (max-width: 768px) {
+    #title {
+        font-size: 8vw;
+    }
+
+    #loginButton {
+        width: 10em;
+        font-size: 0.75em;
+    }
+    #loginButton img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+#earthImg {
+    width: 15vw;
+    height: 15vw;
+    margin-bottom: 30px;
+    border-radius: 10%;  /* Dodajemy tę linijkę */
+    animation: glow1 6s ease-in-out infinite alternate;
+}
+
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0px); }
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#modal-message {
+    font-size: 16px;
+    color: #444;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    #title {
+        font-size: 8vw;
+    }
+
+    #loginButton {
+        width: 10em;
+        font-size: 0.75em;
+    }
+    #loginButton img {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}

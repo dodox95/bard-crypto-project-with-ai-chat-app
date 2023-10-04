@@ -1,0 +1,362 @@
+:root {
+    --navbar-bg: #colorvalue;
+    --navbar-text: #colorvalue;
+}
+
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+#title {
+    font-family: 'Rubik Dirt', cursive;  /* Dodajemy czcionkę Rubik Dirt */
+    font-weight: 700;
+    font-size: 5vw;
+    margin-bottom: 50px;
+    color: #333;
+    text-shadow: 0 0 5px #fafafa, 0 0 10px #fafafa, 0 0 15px #fafafa, 0 0 20px #fafafa, 0 0 30px #fafafa, 0 0 40px #fafafa;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+  .theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+  }
+  .theme-switch input {
+    display:none;
+  }
+  .slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+  }
+  .slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+  }
+  input:checked + .slider {
+    background-color: rgb(95, 90, 90) !important;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px gray !important;;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  .slider.round {
+    border-radius: 34px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+.logo {
+    animation: rotation 50s infinite linear;
+}
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+  }
+  @keyframes orbit {
+    0% {
+        transform: rotate(0deg) translateX(10px) rotate(300deg);
+    }
+    100% {
+        transform: rotate(360deg) translateX(10px) rotate(-360deg);
+    }
+}
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0px); }
+}
+.earth {
+    position: relative;
+    width: 500px; /* Adjust size as needed */
+    height: 500px; /* Adjust size as needed */
+    animation: float 6s infinite ease-in-out;
+  }
+.jumbotron {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed */
+}
+.jumbotron-text {
+    width: 50%; /* Adjust as needed */
+}
+.jumbotron-img {
+    width: 50%; /* Adjust as needed */
+    text-align: center;
+}
+.title {
+    padding-top: 100px;
+}
+.jumbotron-title {
+    width: 100%; /* Adjust as needed */
+    text-align: center; /* Centers the text */
+    padding-top: 20px; /* Adds padding to the top */
+    padding-bottom: 20px; /* Adds padding to the bottom */
+}
+header {
+    padding-bottom: 10px;
+}
+.image-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+.image-item {
+    text-align: center;
+    margin: 10px;
+}
+.image-item img {
+    width: 100px;  /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+}
+.image-item p {
+    margin-top: 10px;
+}
+.articles-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+.article-card {
+    width: 40%; /* Adjust as needed */
+    background-color: #f8f9fa; /* Light grey background color */
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Adds a slight shadow to make the card appear elevated */
+    border-radius: 15px; /* Gives the card rounded corners */
+}
+.article-card h2 {
+    color: #343a40; /* Dark grey text color */
+}
+.article-card p {
+    color: #6c757d; /* Medium grey text color */
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--navbar-bg) !important;
+    color: var(--navbar-text) !important;
+    box-shadow: 0 2px 0px rgba(0, 0, 0, 0.1);
+
+}
+.navbar a {
+    color: var(--navbar-text) !important;
+}
+.nav-item .nav-link:hover {
+    color: brown !important; /* Text color stays the same on hover */
+    text-shadow: 0 0 5px #ffc107, 0 0 10px #ffc107, 0 0 15px #ffc107, 0 0 20px white, 0 0 30px white, 0 0 40px whitesmoke;
+    transition: all 0.3s ease;
+}
+
+/* Add emphasis to the first nav item */
+/* Add emphasis to the first nav item */
+.nav-item:first-child .nav-link {
+    background: linear-gradient(to right, brown, brown);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+    color: white !important; /* Text color stays the same on hover */
+    border-radius: 50px; /* Gives pill-like shape to the buttons */
+    backdrop-filter: blur(10px); /* Creates the frosted glass effect */
+    -webkit-backdrop-filter: blur(10px); /* Ensure compatibility with Safari */
+    border: 1px solid rgba(255, 255, 255, 0.18); /* Adds soft white border */
+}
+.nav-item:first-child .nav-link:hover {
+    background: linear-gradient(to right, rgb(143, 54, 54), brown);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Shadow intensifies on hover */
+    transform: scale(1.02); /* Slightly enlarges the button on hover for a realistic feel */
+}
+
+.articles-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+.web-card {
+    width: 90%; /* Adjust as needed */
+    height: 90%;
+    background-color: #f8f9fa; /* Light grey background color */
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Adds a slight shadow to make the card appear elevated */
+    border-radius: 15px; /* Gives the card rounded corners */
+}
+.web-card h2 {
+    color: #343a40; /* Dark grey text color */
+}
+.web-card p {
+    color: #6c757d; /* Medium grey text color */
+}
+#lnsc {
+    color: #0d6efd;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:40px;
+    font-weight: bold;
+    text-align: center;
+}
+.centered {
+ text-align: center;
+}
+#web {
+    color: #0d6efd;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:40px;
+    font-weight: bold;
+    text-align: center;
+    font-weight: bold;
+}
+#supply {
+    color: #0d6efd;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:40px;
+    font-weight: bold;
+    text-align: center;
+    font-weight: bold;
+}
+/* --------------------------------------  */
+
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  #tokenomie-chart {
+    height: 400px;
+  }
+  
+  #tokenomie-key {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .token-key {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .token-key__color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .token-key__label {
+    font-weight: bold;
+  }
+  
+  #lnsc-gold {
+    color: gold !important;
+  }
+
+  .content {
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.8;
+    font-size: 1.5rem;
+    color: #111;
+    background: #F3ECE7;
+    padding: 20px;
+    border-radius: 10px;
+}
+.content p {
+    text-align: justify;
+    text-indent: 30px;
+}
+.content span {
+    color: #f2a900;
+    font-weight: bold;
+}
+
+.timeline {
+    list-style-type: none;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    background-color: #4285F4;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+}
+
+.timeline li {
+    padding: 20px 40px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.timeline li::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.timeline li .time {
+    float: left;
+    padding-right: 10px;
+    color: #4285F4;
+}
+
+
+.timeline li .desc {
+    color: #333;
+}
+
+.timeline li .desc::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    width: 10px;
+    height: 10px;
+    background-color: #4285F4;
+    border-radius: 1%;
+}
+    .nav-link {
+        margin-right: 15px;
+    }
+
+a.dropdown-item {
+    background-color: #222;
+}
+
+a.dropdown-item:hover {
+    background-color: blue;
+}
+
+.timeline li .time .completed {
+    float: left;
+    padding-right: 10px;
+    color: #4285F4 !important;
+}

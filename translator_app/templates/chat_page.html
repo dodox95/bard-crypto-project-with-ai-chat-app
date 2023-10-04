@@ -1,0 +1,351 @@
+<!-- skrypt "chat_page.html" -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with BardWeb3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --button-color: white;
+            --input-bg: rgba(255, 255, 255, 0.2);
+            --button-text-color: #202124;
+            --input-text-color: white;  /* dodajemy nową zmienną */
+            --loader-color: rgba(255, 255, 255, 0.8);
+            --neon-color-light: gray;  /* jasny kolor neonowy dla dark mode */
+            --neon-color-dark: #222;  /* ciemny kolor neonowy dla light mode */
+            --neon-color: var(--neon-color-light); 
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #202124;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.5s;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--button-color);
+            cursor: pointer;
+            transition: color 0.5s;
+        }
+        #chat {
+            width: 80vw;
+            height: 80vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat h1 {
+            text-align: center;
+            color: var(--button-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        #chatHistory {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 5px;  /* Zmniejszamy margines dolny */
+        }
+        #chat textarea, #chat button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--input-bg);
+        }
+        #inputContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 50%;
+            margin: 10px auto;
+        }
+        #chat textarea {
+            flex-grow: 1;
+            margin-right: 10px;
+            overflow: auto;
+            resize: none;
+            color: var(--input-text-color);  /* ustawiamy kolor tekstu */
+        }
+        #chat button {
+            width: 40px;
+            height: 40px;
+            background-color: var(--button-color);
+            color: var(--button-text-color);
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chat button::before {
+            content: '→';
+            font-size: 20px;
+        }
+        p {
+            color: var(--button-color);
+            margin: 0;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: rgba(0,0,0,0.2);
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+        p:nth-child(even) {
+            align-self: flex-end;
+            background-color: rgba(255,255,255,0.1);
+        }
+        #loader {
+            display: none;
+            border: 4px solid rgba(0, 0, 0, 0.1);  /* zmieniony kolor i rozmiar obręczy */
+            border-top: 4px solid var(--loader-color);  /* zmieniony kolor i rozmiar linii */
+            border-radius: 50%;
+            width: 50px;  /* zmniejszony rozmiar */
+            height: 50px;  /* zmniejszony rozmiar */
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #botTyping {
+            position: absolute;
+            top: 60%;  /* przesunięcie w dół, żeby nie nakładało się na loader */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;  /* dodane, aby wyśrodkować tekst i kropki */
+            display: none;  /* ukrycie na starcie */
+        }
+        .dots {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff;
+            position: relative;
+            animation: dots 1s infinite;
+        }
+        .dots::before, .dots::after {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff;
+            position: absolute;
+        }
+        .dots::before {
+            left: -15px;
+            animation: dots 1s infinite 0.2s;
+        }
+        .dots::after {
+            left: 15px;
+            animation: dots 1s infinite 0.4s;
+        }
+        @keyframes dots {
+            0%, 20%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: max-content; }  /* zakończenie animacji na końcu wygenerowanego tekstu */
+        }
+        @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: orange; }
+        }
+        p.error {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid orange;
+            animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        #title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #title h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+            color: white;
+            text-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color), 0 0 15px var(--neon-color), 0 0 20px var(--neon-color);
+            animation: glow 2s ease-in-out infinite alternate;
+            font-family: 'Luckiest Guy', cursive;  /* Dodajemy czcionkę Chango */
+        }
+        #title img {
+            height: 2.5em; /* Adjust as needed */
+            margin-left: 10px;
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color), 0 0 15px var(--neon-color), 0 0 20px var(--neon-color);
+            }
+            to {
+                text-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color), 0 0 30px var(--neon-color), 0 0 40px var(--neon-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <div id="title">
+            <h1>BardWeb3</h1>
+            <img src="{% static 'ai.png' %}" alt="AI"/>
+        </div>
+                <div id="chatHistory">
+            {% for message in chat_history %}
+                {% if message.message_type == 'ERROR' %}
+                    <p style="color: red;">{{ message.message }}</p>
+                {% else %}
+                    <p>{{ message.message }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>             
+        <div id="waveform" style="height: 100px;"></div> <!-- dodany div dla wykresu dźwięku -->
+        <div id="inputContainer">
+            <button id="microphone-btn"><i class="fas fa-microphone"></i></button>
+            <textarea id="question" placeholder="Your question" onkeydown="if(event.key==='Enter' && !event.shiftKey) {event.preventDefault(); askBard();}"></textarea>
+            <button onclick="askBard()"></button>
+        </div>
+    </div>
+
+    <div id="loader"></div>
+    <div id="botTyping">
+        Bot is typing
+    </div>
+    <div class="theme-toggle">
+        <i id="theme-icon" class="fas fa-moon"></i>
+    </div>
+    <script>
+        function askBard() {
+            const question = document.getElementById("question");
+            const loader = document.getElementById("loader");
+            const botTyping = document.getElementById("botTyping");
+            const walletUser = sessionStorage.getItem('walletUser');
+    if (!walletUser) {
+        openModal("No wallet address found. Please log in and try again.");
+        return;
+    }
+    if (!question.value) {
+        return;
+    }
+    const chatHistory = document.getElementById("chatHistory");
+    const userMessage = document.createElement("p");
+    userMessage.textContent = `You: ${question.value}`;
+    chatHistory.appendChild(userMessage);
+    loader.style.display = "block";
+    botTyping.style.display = "block";
+    fetch(`/chat/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            question: question.value,
+            walletUser: sessionStorage.getItem('walletUser'),
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Problem communicating with the server");
+        }
+        return response.json();
+    })
+    .then(data => {
+        const botMessage = document.createElement("p");
+        botMessage.textContent = `Bot: ${data.answer}`;
+        chatHistory.appendChild(botMessage);
+        question.value = '';
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        loader.style.display = "none";
+        botTyping.style.display = "none";
+    })
+    .catch((error) => {
+        const errorMessage = document.createElement("p");
+        errorMessage.classList.add("error"); 
+        errorMessage.textContent = `Error: ${error.message}`;
+        chatHistory.appendChild(errorMessage);
+        console.error('Error:', error);
+        loader.style.display = "none";
+        botTyping.style.display = "none";
+    });
+}       
+document.querySelector('.theme-toggle').addEventListener('click', function() {
+    if (document.body.style.backgroundColor !== 'white') {
+        document.body.style.backgroundColor = 'white';
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(0,0,0,0.1)');
+        document.documentElement.style.setProperty('--button-color', 'black');
+        document.documentElement.style.setProperty('--button-text-color', 'white');
+        document.documentElement.style.setProperty('--input-bg', 'rgba(0,0,0,0.2)');
+        document.documentElement.style.setProperty('--input-text-color', 'black');
+        document.documentElement.style.setProperty('--neon-color', 'var(--neon-color-dark)'); 
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+    } else {
+        document.body.style.backgroundColor = '#202124';
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(255,255,255,0.1)');
+        document.documentElement.style.setProperty('--button-color', 'white');
+        document.documentElement.style.setProperty('--button-text-color', '#202124');
+        document.documentElement.style.setProperty('--input-bg', 'rgba(255,255,255,0.2)');
+        document.documentElement.style.setProperty('--input-text-color', 'white');
+        document.documentElement.style.setProperty('--neon-color', 'var(--neon-color-light)'); 
+        document.getElementById('theme-icon').className = 'fas fa-moon';
+    }
+});
+        const microphoneButton = document.getElementById('microphone-btn');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        let wavesurfer;
+        wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'violet',
+            progressColor: 'purple'
+        });
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            microphoneButton.addEventListener('click', function() {
+                recognition.start();
+                wavesurfer.microphone.start();
+            });
+            recognition.onresult = function(event) {
+                const question = document.getElementById('question');
+                question.value = event.results[0][0].transcript;
+                wavesurfer.microphone.stop();
+            };
+        } else {
+            microphoneButton.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

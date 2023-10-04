@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.9/web3.min.js"></script>
+<script>
+    // Sprawdzanie, czy użytkownik jest zalogowany
+    if (!sessionStorage.getItem('loggedIn')) {
+        window.location.href = "/login/";
+    }
+
+    function logout() {
+        sessionStorage.removeItem('loggedIn');
+        window.location.href = "/login/";
+    }
+
+    async function checkLoginStatus() {
+        if (window.ethereum) {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (!accounts.length) {
+                // Użytkownik jest wylogowany
+                logout();
+            }
+        }
+    }
+
+    // Sprawdzaj status logowania co 10 minut
+    setInterval(checkLoginStatus, 100000);
+</script>
+
+    <button onclick="logout()">Logout</button>
+
+    <form id="translationForm" method="POST">
+        {% csrf_token %}
+        <label for="{{ form.text_to_translate.id_for_label }}">Text:</label><br>
+        {{ form.text_to_translate }}<br>
+        <label for="{{ form.language.id_for_label }}">Translate to:</label><br>
+        {{ form.language }}<br>
+        <input type="submit" value="Translate">
+    </form>
+
+    {% if translation %}
+        <p>Translation: {{ translation }}</p>
+    {% endif %}
+</body>
+</html>
